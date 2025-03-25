@@ -99,4 +99,9 @@ def reset_password():
     return render_template('reset-password.html')
 
 if __name__ == '__main__':
-    app.run(debug=True) 
+    # For local development
+    app.run(debug=True)
+else:
+    # For production - Render will use this app object
+    # Make sure debug is false in production
+    app.debug = False 
