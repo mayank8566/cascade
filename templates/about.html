@@ -1,0 +1,194 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<section class="page-header">
+    <h1>About CASCADE</h1>
+    <div class="cosmic-divider"></div>
+</section>
+
+<section class="about-content">
+    <div class="about-card">
+        <h2>Our Origin Story</h2>
+        <p>
+            CASCADE was born from the fusion of two legendary Minecraft teams: RUPTURES and FAITH.
+            What started as an alliance quickly evolved into something greater - a unified force
+            with a shared vision of dominance and excellence in the Minecraft universe.
+        </p>
+    </div>
+
+    <div class="about-card">
+        <h2>The Meaning Behind CASCADE</h2>
+        <p>
+            The name CASCADE represents our team's ability to flow seamlessly together, 
+            unleashing a cascade of skills and strategies that overwhelm our opponents.
+            Like a cosmic waterfall of stars, we bring beauty and power to every server we join.
+        </p>
+    </div>
+
+    <div class="about-timeline">
+        <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <h3>RUPTURES Era</h3>
+            <p>Known for their aggressive gameplay and tactical dominance</p>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <h3>FAITH Era</h3>
+            <p>Renowned for their strategic planning and resource management</p>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <h3>The Alliance</h3>
+            <p>The teams join forces to create an unstoppable collaboration</p>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <h3>CASCADE Formation</h3>
+            <p>The official merger and birth of a legendary team</p>
+        </div>
+    </div>
+
+    <div class="guidelines-section">
+        <h2>Community Guidelines</h2>
+        <div class="cosmic-divider small"></div>
+        
+        <div class="guidelines-container">
+            <div class="guideline-card">
+                <div class="guideline-icon">📜</div>
+                <h3>Code of Conduct</h3>
+                <ul>
+                    <li>Respect all members regardless of their skill level</li>
+                    <li>Zero tolerance for toxicity or harassment</li>
+                    <li>Constructive criticism is welcome, negativity is not</li>
+                    <li>Maintain proper language in all team communications</li>
+                    <li>Represent CASCADE with honor in all servers</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-card">
+                <div class="guideline-icon">🛡️</div>
+                <h3>Team Values</h3>
+                <ul>
+                    <li>Unity: We succeed and fail as one team</li>
+                    <li>Excellence: Always strive to improve your skills</li>
+                    <li>Support: Help fellow members grow and learn</li>
+                    <li>Strategy: Think before you act in all situations</li>
+                    <li>Dedication: Consistent participation in team events</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-card">
+                <div class="guideline-icon">⚔️</div>
+                <h3>Training Requirements</h3>
+                <ul>
+                    <li>Attend at least one training session weekly</li>
+                    <li>Practice your primary gameplay skill regularly</li>
+                    <li>Be open to coaching from higher-tier players</li>
+                    <li>Record and review your gameplay when possible</li>
+                    <li>Stay updated with current game mechanics and meta</li>
+                </ul>
+            </div>
+            
+            <div class="guideline-card">
+                <div class="guideline-icon">🏆</div>
+                <h3>Tournament Conduct</h3>
+                <ul>
+                    <li>Punctuality is mandatory for tournament matches</li>
+                    <li>Follow team strategies as directed by leaders</li>
+                    <li>Maintain sportsmanship regardless of outcome</li>
+                    <li>Report any rule violations through proper channels</li>
+                    <li>Represent CASCADE with pride and professionalism</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% block extra_head %}
+<style>
+    .guidelines-section {
+        margin-top: 60px;
+        text-align: center;
+    }
+    
+    .guidelines-section h2 {
+        font-size: 2.2rem;
+        color: #fff;
+        margin-bottom: 10px;
+    }
+    
+    .cosmic-divider.small {
+        width: 100px;
+        margin: 0 auto 30px;
+    }
+    
+    .guidelines-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+    
+    .guideline-card {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 115, 255, 0.3);
+        border-radius: 10px;
+        padding: 25px;
+        backdrop-filter: blur(10px);
+        text-align: left;
+        transition: all 0.3s ease;
+    }
+    
+    .guideline-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        border-color: #0073ff;
+    }
+    
+    .guideline-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+    
+    .guideline-card h3 {
+        font-size: 1.3rem;
+        color: #0073ff;
+        margin-bottom: 15px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+    }
+    
+    .guideline-card ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .guideline-card li {
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        position: relative;
+        padding-left: 20px;
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    .guideline-card li:before {
+        content: '→';
+        position: absolute;
+        left: 0;
+        color: #0073ff;
+    }
+    
+    .guideline-card li:last-child {
+        border-bottom: none;
+    }
+    
+    @media (max-width: 767px) {
+        .guidelines-container {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+{% endblock %} 

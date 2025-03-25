@@ -1,0 +1,53 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="45" fill="url(#paint0_radial)" />
+  
+  <!-- CSD text -->
+  <path d="M30 55L29 61H34L35 55H30Z" fill="#ffffff"/>
+  <path d="M38 55C35.5 55 34 56 33.5 57.5L34 55H30L29 61H34L34.5 58.5C34.7 57.8 35.3 57.5 36 57.5C36.7 57.5 37 57.8 36.8 58.5L36.3 61H41.3L42 58C42.5 56 40.5 55 38 55Z" fill="#ffffff"/>
+  <path d="M52 55H47C44.5 55 43 56 42.5 57.5L42 60C41.5 62 43 63 45.5 63H50.5C53 63 54.5 62 55 60.5L55.5 58C56 56 54.5 55 52 55ZM51 58L50.5 60.5C50.3 61.2 49.7 61.5 49 61.5C48.3 61.5 48 61.2 48.2 60.5L48.7 58C48.9 57.3 49.5 57 50.2 57C50.9 57 51.2 57.3 51 58Z" fill="#ffffff"/>
+  
+  <!-- Animated sparkles -->
+  <g class="sparkles">
+    <circle cx="25" cy="30" r="2" fill="#ffffff">
+      <animate attributeName="opacity" from="0" to="1" dur="2s" begin="0s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="75" cy="30" r="2" fill="#ffffff">
+      <animate attributeName="opacity" from="0" to="1" dur="2s" begin="0.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="50" cy="20" r="2" fill="#ffffff">
+      <animate attributeName="opacity" from="0" to="1" dur="2s" begin="1s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="30" cy="70" r="2" fill="#ffffff">
+      <animate attributeName="opacity" from="0" to="1" dur="2s" begin="1.5s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="70" cy="70" r="2" fill="#ffffff">
+      <animate attributeName="opacity" from="0" to="1" dur="2s" begin="0.2s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Orbital rings -->
+  <circle cx="50" cy="50" r="40" stroke="url(#paint1_linear)" stroke-width="1" fill="none" opacity="0.5">
+    <animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="10s" repeatCount="indefinite" />
+  </circle>
+  
+  <circle cx="50" cy="50" r="35" stroke="url(#paint2_linear)" stroke-width="1" fill="none" opacity="0.7">
+    <animateTransform attributeName="transform" type="rotate" from="360 50 50" to="0 50 50" dur="8s" repeatCount="indefinite" />
+  </circle>
+  
+  <!-- Gradient definitions -->
+  <defs>
+    <radialGradient id="paint0_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(50 50) rotate(90) scale(45)">
+      <stop offset="0" stop-color="#121224" />
+      <stop offset="1" stop-color="#000000" />
+    </radialGradient>
+    <linearGradient id="paint1_linear" x1="10" y1="10" x2="90" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0073ff" />
+      <stop offset="1" stop-color="#a000ff" />
+    </linearGradient>
+    <linearGradient id="paint2_linear" x1="90" y1="10" x2="10" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a000ff" />
+      <stop offset="1" stop-color="#0073ff" />
+    </linearGradient>
+  </defs>
+</svg> 

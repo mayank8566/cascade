@@ -1,0 +1,29 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="120" height="120" rx="60" fill="url(#paint0_linear)" />
+  
+  <!-- User silhouette -->
+  <path d="M60 60C71.0457 60 80 51.0457 80 40C80 28.9543 71.0457 20 60 20C48.9543 20 40 28.9543 40 40C40 51.0457 48.9543 60 60 60Z" fill="#121224"/>
+  <path d="M98 98C98 98 98 90 90 90C82 90 58 80 40 80C22 80 22 90 22 90V98H98Z" fill="#121224"/>
+  
+  <!-- Space particles -->
+  <circle cx="25" cy="25" r="1.5" fill="#ffffff" />
+  <circle cx="95" cy="45" r="1.5" fill="#ffffff" />
+  <circle cx="75" cy="15" r="1.5" fill="#ffffff" />
+  <circle cx="30" cy="70" r="1" fill="#ffffff" />
+  <circle cx="85" cy="95" r="1" fill="#ffffff" />
+  <circle cx="40" cy="90" r="1" fill="#ffffff" />
+  <circle cx="65" cy="95" r="1.5" fill="#ffffff" />
+  <circle cx="15" cy="40" r="1" fill="#ffffff" />
+  <circle cx="55" cy="25" r="1" fill="#ffffff" />
+  <circle cx="90" cy="65" r="1" fill="#ffffff" />
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000033" />
+      <stop offset="0.5" stop-color="#16213e" />
+      <stop offset="1" stop-color="#1a1a2e" />
+    </linearGradient>
+  </defs>
+</svg> 

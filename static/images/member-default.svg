@@ -1,0 +1,42 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <rect width="120" height="120" rx="60" fill="url(#paint0_linear)" />
+  
+  <!-- CASCADE symbol -->
+  <path d="M60 60C71.0457 60 80 51.0457 80 40C80 28.9543 71.0457 20 60 20C48.9543 20 40 28.9543 40 40C40 51.0457 48.9543 60 60 60Z" fill="#121224"/>
+  <path d="M98 98C98 98 98 90 90 90C82 90 58 80 40 80C22 80 22 90 22 90V98H98Z" fill="#121224"/>
+  
+  <!-- CSD text -->
+  <path d="M47 49L46 55H51L52 49H47Z" fill="#0073ff"/>
+  <path d="M54 49C51.5 49 50 50 49.5 51.5L50 49H47L46 55H51L51.5 52.5C51.7 51.8 52.3 51.5 53 51.5C53.7 51.5 54 51.8 53.8 52.5L53.3 55H58.3L59 52C59.5 50 57.5 49 54 49Z" fill="#0073ff"/>
+  <path d="M68 49H63C60.5 49 59 50 58.5 51.5L58 54C57.5 56 59 57 61.5 57H66.5C69 57 70.5 56 71 54.5L71.5 52C72 50 70.5 49 68 49ZM67 52L66.5 54.5C66.3 55.2 65.7 55.5 65 55.5C64.3 55.5 64 55.2 64.2 54.5L64.7 52C64.9 51.3 65.5 51 66.2 51C66.9 51 67.2 51.3 67 52Z" fill="#0073ff"/>
+  
+  <!-- Space particles -->
+  <circle cx="25" cy="25" r="1.5" fill="#ffffff" />
+  <circle cx="95" cy="45" r="1.5" fill="#ffffff" />
+  <circle cx="75" cy="15" r="1.5" fill="#ffffff" />
+  <circle cx="30" cy="70" r="1" fill="#ffffff" />
+  <circle cx="85" cy="95" r="1" fill="#ffffff" />
+  <circle cx="40" cy="90" r="1" fill="#ffffff" />
+  <circle cx="65" cy="95" r="1.5" fill="#ffffff" />
+  <circle cx="15" cy="40" r="1" fill="#ffffff" />
+  <circle cx="55" cy="25" r="1" fill="#ffffff" />
+  <circle cx="90" cy="65" r="1" fill="#ffffff" />
+  
+  <!-- Glowing border -->
+  <circle cx="60" cy="60" r="58" stroke="url(#paint1_linear)" stroke-width="2" />
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="paint0_linear" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#000033" />
+      <stop offset="0.5" stop-color="#16213e" />
+      <stop offset="1" stop-color="#1a1a2e" />
+    </linearGradient>
+    <linearGradient id="paint1_linear" x1="0" y1="0" x2="120" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0073ff" />
+      <stop offset="0.5" stop-color="#a000ff" />
+      <stop offset="1" stop-color="#0073ff" />
+    </linearGradient>
+  </defs>
+</svg> 

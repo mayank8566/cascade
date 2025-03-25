@@ -1,0 +1,543 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Your Gaming Tiers</h1>
+    <div class="cosmic-divider"></div>
+</div>
+
+<div class="gaming-tiers-container">
+    <div class="gaming-tiers-card">
+        <div class="section-header">
+            <h2>Skill Ratings</h2>
+            <p class="section-description">Select your skill level and training type (HT or LT) for each gameplay category</p>
+        </div>
+        
+        <div class="disclaimer-box">
+            <div class="disclaimer-icon">⚠️</div>
+            <div class="disclaimer-content">
+                <h4>IMPORTANT NOTICE</h4>
+                <p>Please provide accurate tier information. Submitting false or inflated skill ratings may result in account suspension. Your ratings are used for team assignments and official rosters.</p>
+            </div>
+        </div>
+        
+        <form id="tiers-form" class="tiers-form">
+            <div class="tiers-grid">
+                <div class="tier-category">
+                    <h3>NPOT</h3>
+                    <div class="tier-inputs">
+                        <div class="tier-radio-group">
+                            <p class="training-type-label">Training Type:</p>
+                            <div class="radio-options">
+                                <label>
+                                    <input type="radio" name="npot-training" value="ht" class="training-radio"> HT
+                                </label>
+                                <label>
+                                    <input type="radio" name="npot-training" value="lt" class="training-radio"> LT
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tier-input-group" id="npot-ht-group" style="display: none;">
+                            <label for="npot-ht">Hard Training (1 to 5)</label>
+                            <select id="npot-ht" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="tier-input-group" id="npot-lt-group" style="display: none;">
+                            <label for="npot-lt">Light Training (1 to 5)</label>
+                            <select id="npot-lt" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tier-category">
+                    <h3>SMP</h3>
+                    <div class="tier-inputs">
+                        <div class="tier-radio-group">
+                            <p class="training-type-label">Training Type:</p>
+                            <div class="radio-options">
+                                <label>
+                                    <input type="radio" name="smp-training" value="ht" class="training-radio"> HT
+                                </label>
+                                <label>
+                                    <input type="radio" name="smp-training" value="lt" class="training-radio"> LT
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tier-input-group" id="smp-ht-group" style="display: none;">
+                            <label for="smp-ht">Hard Training (1 to 5)</label>
+                            <select id="smp-ht" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="tier-input-group" id="smp-lt-group" style="display: none;">
+                            <label for="smp-lt">Light Training (1 to 5)</label>
+                            <select id="smp-lt" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tier-category">
+                    <h3>UHC</h3>
+                    <div class="tier-inputs">
+                        <div class="tier-radio-group">
+                            <p class="training-type-label">Training Type:</p>
+                            <div class="radio-options">
+                                <label>
+                                    <input type="radio" name="uhc-training" value="ht" class="training-radio"> HT
+                                </label>
+                                <label>
+                                    <input type="radio" name="uhc-training" value="lt" class="training-radio"> LT
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tier-input-group" id="uhc-ht-group" style="display: none;">
+                            <label for="uhc-ht">Hard Training (1 to 5)</label>
+                            <select id="uhc-ht" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="tier-input-group" id="uhc-lt-group" style="display: none;">
+                            <label for="uhc-lt">Light Training (1 to 5)</label>
+                            <select id="uhc-lt" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tier-category">
+                    <h3>Sword</h3>
+                    <div class="tier-inputs">
+                        <div class="tier-radio-group">
+                            <p class="training-type-label">Training Type:</p>
+                            <div class="radio-options">
+                                <label>
+                                    <input type="radio" name="sword-training" value="ht" class="training-radio"> HT
+                                </label>
+                                <label>
+                                    <input type="radio" name="sword-training" value="lt" class="training-radio"> LT
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tier-input-group" id="sword-ht-group" style="display: none;">
+                            <label for="sword-ht">Hard Training (1 to 5)</label>
+                            <select id="sword-ht" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="tier-input-group" id="sword-lt-group" style="display: none;">
+                            <label for="sword-lt">Light Training (1 to 5)</label>
+                            <select id="sword-lt" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tier-category">
+                    <h3>CPVP</h3>
+                    <div class="tier-inputs">
+                        <div class="tier-radio-group">
+                            <p class="training-type-label">Training Type:</p>
+                            <div class="radio-options">
+                                <label>
+                                    <input type="radio" name="cpvp-training" value="ht" class="training-radio"> HT
+                                </label>
+                                <label>
+                                    <input type="radio" name="cpvp-training" value="lt" class="training-radio"> LT
+                                </label>
+                            </div>
+                        </div>
+                        <div class="tier-input-group" id="cpvp-ht-group" style="display: none;">
+                            <label for="cpvp-ht">Hard Training (1 to 5)</label>
+                            <select id="cpvp-ht" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <div class="tier-input-group" id="cpvp-lt-group" style="display: none;">
+                            <label for="cpvp-lt">Light Training (1 to 5)</label>
+                            <select id="cpvp-lt" class="tier-select">
+                                <option value="">Select...</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="auth-btn save-tiers-btn">Save Changes</button>
+            <div class="success-message" id="tiers-success">Your gaming tiers have been saved successfully!</div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Gaming Tiers Form Styles */
+    .gaming-tiers-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+    
+    .gaming-tiers-card {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 115, 255, 0.3);
+        border-radius: 10px;
+        padding: 30px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .section-header {
+        margin-bottom: 25px;
+    }
+    
+    .section-header h2 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        color: #fff;
+    }
+    
+    .section-description {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+    }
+    
+    .tiers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .tier-category {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid rgba(160, 0, 255, 0.2);
+    }
+    
+    .tier-category h3 {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        color: #0073ff;
+        text-align: center;
+    }
+    
+    .tier-inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .tier-input-group {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .tier-radio-group {
+        margin-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 10px;
+    }
+    
+    .training-type-label {
+        margin-bottom: 5px;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .radio-options {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .radio-options label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .radio-options input[type="radio"] {
+        margin-right: 5px;
+        cursor: pointer;
+    }
+    
+    .tier-select {
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(160, 0, 255, 0.3);
+        border-radius: 5px;
+        color: #fff;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        font-family: 'Orbitron', sans-serif;
+    }
+    
+    .tier-select:focus {
+        outline: none;
+        border-color: #0073ff;
+        box-shadow: 0 0 10px rgba(0, 115, 255, 0.5);
+    }
+    
+    .tier-select option {
+        background-color: #121212;
+        color: #fff;
+    }
+    
+    .save-tiers-btn {
+        margin-top: 10px;
+    }
+    
+    .success-message {
+        display: none;
+        padding: 10px;
+        margin-top: 15px;
+        border-radius: 5px;
+        background: rgba(0, 255, 0, 0.1);
+        border-left: 3px solid #00ff00;
+        color: #00ff00;
+        text-align: center;
+    }
+    
+    @media (max-width: 767px) {
+        .gaming-tiers-container {
+            padding: 0 15px;
+        }
+        
+        .tiers-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Firebase Firestore
+        const db = firebase.firestore();
+        
+        // Set up radio button event listeners for each category
+        setupRadioListeners('npot');
+        setupRadioListeners('smp');
+        setupRadioListeners('uhc');
+        setupRadioListeners('sword');
+        setupRadioListeners('cpvp');
+        
+        function setupRadioListeners(category) {
+            const radioButtons = document.querySelectorAll(`input[name="${category}-training"]`);
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Hide both input groups first
+                    document.getElementById(`${category}-ht-group`).style.display = 'none';
+                    document.getElementById(`${category}-lt-group`).style.display = 'none';
+                    
+                    // Clear values when switching training type
+                    document.getElementById(`${category}-ht`).value = '';
+                    document.getElementById(`${category}-lt`).value = '';
+                    
+                    // Show the selected input group
+                    if (this.value === 'ht') {
+                        document.getElementById(`${category}-ht-group`).style.display = 'block';
+                    } else if (this.value === 'lt') {
+                        document.getElementById(`${category}-lt-group`).style.display = 'block';
+                    }
+                });
+            });
+        }
+        
+        // Check if user is logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // Load user's tier data
+                loadTierData(user);
+                
+                // Handle form submission
+                document.getElementById('tiers-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    saveTierData(user);
+                });
+            } else {
+                // User is not logged in, redirect to login page
+                window.location.href = '/login';
+            }
+        });
+        
+        // Load user's tier data from Firestore
+        function loadTierData(user) {
+            db.collection('users').doc(user.uid).get().then(doc => {
+                if (doc.exists && doc.data().tiers) {
+                    const tiers = doc.data().tiers;
+                    
+                    // NPOT
+                    if (tiers.npot) {
+                        if (tiers.npot.ht) {
+                            document.querySelector('input[name="npot-training"][value="ht"]').checked = true;
+                            document.getElementById('npot-ht-group').style.display = 'block';
+                            document.getElementById('npot-ht').value = tiers.npot.ht;
+                        } else if (tiers.npot.lt) {
+                            document.querySelector('input[name="npot-training"][value="lt"]').checked = true;
+                            document.getElementById('npot-lt-group').style.display = 'block';
+                            document.getElementById('npot-lt').value = tiers.npot.lt;
+                        }
+                    }
+                    
+                    // SMP
+                    if (tiers.smp) {
+                        if (tiers.smp.ht) {
+                            document.querySelector('input[name="smp-training"][value="ht"]').checked = true;
+                            document.getElementById('smp-ht-group').style.display = 'block';
+                            document.getElementById('smp-ht').value = tiers.smp.ht;
+                        } else if (tiers.smp.lt) {
+                            document.querySelector('input[name="smp-training"][value="lt"]').checked = true;
+                            document.getElementById('smp-lt-group').style.display = 'block';
+                            document.getElementById('smp-lt').value = tiers.smp.lt;
+                        }
+                    }
+                    
+                    // UHC
+                    if (tiers.uhc) {
+                        if (tiers.uhc.ht) {
+                            document.querySelector('input[name="uhc-training"][value="ht"]').checked = true;
+                            document.getElementById('uhc-ht-group').style.display = 'block';
+                            document.getElementById('uhc-ht').value = tiers.uhc.ht;
+                        } else if (tiers.uhc.lt) {
+                            document.querySelector('input[name="uhc-training"][value="lt"]').checked = true;
+                            document.getElementById('uhc-lt-group').style.display = 'block';
+                            document.getElementById('uhc-lt').value = tiers.uhc.lt;
+                        }
+                    }
+                    
+                    // Sword
+                    if (tiers.sword) {
+                        if (tiers.sword.ht) {
+                            document.querySelector('input[name="sword-training"][value="ht"]').checked = true;
+                            document.getElementById('sword-ht-group').style.display = 'block';
+                            document.getElementById('sword-ht').value = tiers.sword.ht;
+                        } else if (tiers.sword.lt) {
+                            document.querySelector('input[name="sword-training"][value="lt"]').checked = true;
+                            document.getElementById('sword-lt-group').style.display = 'block';
+                            document.getElementById('sword-lt').value = tiers.sword.lt;
+                        }
+                    }
+                    
+                    // CPVP
+                    if (tiers.cpvp) {
+                        if (tiers.cpvp.ht) {
+                            document.querySelector('input[name="cpvp-training"][value="ht"]').checked = true;
+                            document.getElementById('cpvp-ht-group').style.display = 'block';
+                            document.getElementById('cpvp-ht').value = tiers.cpvp.ht;
+                        } else if (tiers.cpvp.lt) {
+                            document.querySelector('input[name="cpvp-training"][value="lt"]').checked = true;
+                            document.getElementById('cpvp-lt-group').style.display = 'block';
+                            document.getElementById('cpvp-lt').value = tiers.cpvp.lt;
+                        }
+                    }
+                }
+            }).catch(error => {
+                console.error("Error loading tier data:", error);
+            });
+        }
+        
+        // Save user's tier data to Firestore
+        function saveTierData(user) {
+            const tierData = {
+                npot: {
+                    ht: document.querySelector('input[name="npot-training"][value="ht"]').checked ? document.getElementById('npot-ht').value : '',
+                    lt: document.querySelector('input[name="npot-training"][value="lt"]').checked ? document.getElementById('npot-lt').value : ''
+                },
+                smp: {
+                    ht: document.querySelector('input[name="smp-training"][value="ht"]').checked ? document.getElementById('smp-ht').value : '',
+                    lt: document.querySelector('input[name="smp-training"][value="lt"]').checked ? document.getElementById('smp-lt').value : ''
+                },
+                uhc: {
+                    ht: document.querySelector('input[name="uhc-training"][value="ht"]').checked ? document.getElementById('uhc-ht').value : '',
+                    lt: document.querySelector('input[name="uhc-training"][value="lt"]').checked ? document.getElementById('uhc-lt').value : ''
+                },
+                sword: {
+                    ht: document.querySelector('input[name="sword-training"][value="ht"]').checked ? document.getElementById('sword-ht').value : '',
+                    lt: document.querySelector('input[name="sword-training"][value="lt"]').checked ? document.getElementById('sword-lt').value : ''
+                },
+                cpvp: {
+                    ht: document.querySelector('input[name="cpvp-training"][value="ht"]').checked ? document.getElementById('cpvp-ht').value : '',
+                    lt: document.querySelector('input[name="cpvp-training"][value="lt"]').checked ? document.getElementById('cpvp-lt').value : ''
+                },
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // Update Firestore document
+            db.collection('users').doc(user.uid).update({
+                tiers: tierData,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                // Show success message
+                const success = document.getElementById('tiers-success');
+                success.style.display = 'block';
+                setTimeout(() => {
+                    success.style.display = 'none';
+                }, 3000);
+            }).catch(error => {
+                console.error("Error saving tier data:", error);
+            });
+        }
+    });
+</script>
+{% endblock %} 

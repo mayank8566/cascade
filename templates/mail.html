@@ -1,0 +1,420 @@
+{% extends "layout.html" %}
+
+{% block extra_head %}
+<script src="{{ url_for('static', filename='js/mail-functions.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Mail System</h1>
+    <div class="cosmic-divider"></div>
+</section>
+
+<div class="mail-container">
+    <div class="mail-header">
+        <h2>CASCADE Mail</h2>
+        <div class="mail-actions">
+            <button id="refreshButton" class="btn btn-secondary">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+    </div>
+
+    <div class="mail-layout">
+        <!-- Sidebar with folders -->
+        <div class="mail-sidebar">
+            <ul class="mail-folders">
+                <li class="mail-folder active" data-folder="inbox">
+                    <span class="folder-icon"><i class="fas fa-inbox"></i></span>
+                    <span class="folder-name">Inbox</span>
+                    <span class="folder-count">3</span>
+                </li>
+                <li class="mail-folder" data-folder="sent">
+                    <span class="folder-icon"><i class="fas fa-paper-plane"></i></span>
+                    <span class="folder-name">Sent</span>
+                    <span class="folder-count">2</span>
+                </li>
+                <li class="mail-folder" data-folder="drafts">
+                    <span class="folder-icon"><i class="fas fa-file-alt"></i></span>
+                    <span class="folder-name">Drafts</span>
+                    <span class="folder-count">1</span>
+                </li>
+                <li class="mail-folder" data-folder="trash">
+                    <span class="folder-icon"><i class="fas fa-trash-alt"></i></span>
+                    <span class="folder-name">Trash</span>
+                    <span class="folder-count">0</span>
+                </li>
+            </ul>
+            
+            <div class="sidebar-divider"></div>
+            
+            <h3 class="sidebar-title">Contacts</h3>
+            <ul class="mail-contacts">
+                <li class="mail-contact" data-username="ekansh">
+                    <div class="contact-avatar">E</div>
+                    <span class="contact-name">Ekansh</span>
+                </li>
+                <li class="mail-contact" data-username="captainteddy">
+                    <div class="contact-avatar">C</div>
+                    <span class="contact-name">CaptainTeddy</span>
+                </li>
+                <li class="mail-contact" data-username="s4ksham">
+                    <div class="contact-avatar">S</div>
+                    <span class="contact-name">S4ksham</span>
+                </li>
+                <li class="mail-contact" data-username="notpriyansh">
+                    <div class="contact-avatar">N</div>
+                    <span class="contact-name">NotPriyansh</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Mail content area -->
+        <div class="mail-content">
+            <!-- Mail list view -->
+            <div class="mail-list" id="mailList">
+                <!-- Unread mail example -->
+                <div class="mail-item unread" data-mail-id="1">
+                    <div class="mail-sender">Ekansh</div>
+                    <div class="mail-preview">
+                        <div class="mail-subject">Welcome to CASCADE Mail System</div>
+                        <div class="mail-snippet">Hey there! Welcome to the CASCADE mail system. You can use this to communicate with other members...</div>
+                    </div>
+                    <div class="mail-meta">
+                        <div class="mail-time">10:23 AM</div>
+                    </div>
+                </div>
+                
+                <!-- Regular mail examples -->
+                <div class="mail-item" data-mail-id="2">
+                    <div class="mail-sender">CaptainTeddy</div>
+                    <div class="mail-preview">
+                        <div class="mail-subject">Next Team Meeting</div>
+                        <div class="mail-snippet">Let's schedule our next team meeting for Saturday at 7PM. We need to discuss the upcoming tournament...</div>
+                    </div>
+                    <div class="mail-meta">
+                        <div class="mail-time">Yesterday</div>
+                    </div>
+                </div>
+                
+                <div class="mail-item" data-mail-id="3">
+                    <div class="mail-sender">S4ksham</div>
+                    <div class="mail-preview">
+                        <div class="mail-subject">Training Schedule Update</div>
+                        <div class="mail-snippet">Hi everyone, I've updated the training schedule for next week. Please check your tier assignments...</div>
+                    </div>
+                    <div class="mail-meta">
+                        <div class="mail-time">Sep 12</div>
+                    </div>
+                </div>
+                
+                <div class="mail-item unread" data-mail-id="4">
+                    <div class="mail-sender">NotPriyansh</div>
+                    <div class="mail-preview">
+                        <div class="mail-subject">War Preparations</div>
+                        <div class="mail-snippet">We need to prepare for the upcoming clan war. Please make sure your gear is ready and you've practiced...</div>
+                    </div>
+                    <div class="mail-meta">
+                        <div class="mail-time">Sep 10</div>
+                    </div>
+                </div>
+                
+                <div class="mail-item" data-mail-id="5">
+                    <div class="mail-sender">System</div>
+                    <div class="mail-preview">
+                        <div class="mail-subject">Your account has been activated</div>
+                        <div class="mail-snippet">Welcome to CASCADE! Your account has been successfully activated. You now have access to all features...</div>
+                    </div>
+                    <div class="mail-meta">
+                        <div class="mail-time">Sep 5</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mail detail view (hidden by default) -->
+            <div class="mail-detail" id="mailDetail">
+                <div class="detail-header">
+                    <div class="detail-subject">Welcome to CASCADE Mail System</div>
+                    <div class="detail-meta">
+                        <div class="detail-sender">
+                            <div class="sender-avatar">E</div>
+                            <div class="sender-info">
+                                <div class="sender-name">Ekansh</div>
+                                <div class="sender-email">ekansh@cascade.com</div>
+                            </div>
+                        </div>
+                        <div class="detail-time">Today, 10:23 AM</div>
+                    </div>
+                </div>
+                
+                <div class="detail-content">
+                    <p>Hey there!</p>
+                    <p>Welcome to the CASCADE mail system. You can use this to communicate with other members of the team, organize events, and stay updated on clan activities.</p>
+                    <p>Some key features:</p>
+                    <ul>
+                        <li>Direct messaging with any CASCADE member</li>
+                        <li>Organized folders for your messages</li>
+                        <li>Notifications for new messages</li>
+                        <li>Team announcements and updates</li>
+                    </ul>
+                    <p>Feel free to reach out if you have any questions!</p>
+                    <p>Best regards,<br>Ekansh<br>CASCADE Founder</p>
+                </div>
+                
+                <div class="detail-actions">
+                    <button class="btn btn-secondary" id="replyBtn">
+                        <i class="fas fa-reply"></i> Reply
+                    </button>
+                    <button class="btn btn-secondary" id="forwardBtn">
+                        <i class="fas fa-share"></i> Forward
+                    </button>
+                    <button class="btn btn-secondary" id="deleteBtn">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                    <button class="btn btn-secondary" id="backToListBtn">
+                        <i class="fas fa-arrow-left"></i> Back to List
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Compose button (fixed position) -->
+<div class="mail-compose" id="composeBtn">
+    <i class="fas fa-pen"></i>
+</div>
+
+<!-- Compose modal (hidden by default) -->
+<div class="compose-modal" id="composeModal">
+    <div class="compose-header">
+        <div class="compose-title">New Message</div>
+        <div class="compose-close" id="closeComposeBtn">&times;</div>
+    </div>
+    <div class="compose-body">
+        <form id="composeForm">
+            <div class="compose-field">
+                <label for="recipient">To:</label>
+                <input type="text" id="recipient" name="recipient" placeholder="Enter username">
+            </div>
+            <div class="compose-field">
+                <label for="subject">Subject:</label>
+                <input type="text" id="subject" name="subject" placeholder="Enter subject">
+            </div>
+            <div class="compose-field">
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" placeholder="Write your message here..."></textarea>
+            </div>
+        </form>
+    </div>
+    <div class="compose-actions">
+        <button class="btn btn-secondary" id="draftBtn">
+            <i class="fas fa-save"></i> Save Draft
+        </button>
+        <button class="btn btn-primary" id="sendBtn">
+            <i class="fas fa-paper-plane"></i> Send Message
+        </button>
+    </div>
+</div>
+
+<!-- Loader Animation -->
+<div class="loader-container" id="loaderContainer">
+    <div class="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-logo"></div>
+        <div class="loader-text">SENDING...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // DOM Elements
+        const mailList = document.getElementById('mailList');
+        const mailDetail = document.getElementById('mailDetail');
+        const mailItems = document.querySelectorAll('.mail-item');
+        const backToListBtn = document.getElementById('backToListBtn');
+        const composeBtn = document.getElementById('composeBtn');
+        const composeModal = document.getElementById('composeModal');
+        const closeComposeBtn = document.getElementById('closeComposeBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const draftBtn = document.getElementById('draftBtn');
+        const replyBtn = document.getElementById('replyBtn');
+        const mailFolders = document.querySelectorAll('.mail-folder');
+        const mailContacts = document.querySelectorAll('.mail-contact');
+        const loaderContainer = document.getElementById('loaderContainer');
+        
+        // Show mail detail when clicking on a mail item
+        mailItems.forEach(item => {
+            item.addEventListener('click', function() {
+                // Mark as read
+                this.classList.remove('unread');
+                
+                // Show detail view, hide list view
+                mailList.style.display = 'none';
+                mailDetail.classList.add('show');
+                
+                // You would typically load the actual mail content here
+                // For now we're just showing the same content for demo
+                
+                // Scroll to top of detail view
+                mailDetail.scrollTop = 0;
+            });
+        });
+        
+        // Back to mail list
+        backToListBtn.addEventListener('click', function() {
+            mailDetail.classList.remove('show');
+            mailList.style.display = 'block';
+        });
+        
+        // Show compose modal
+        composeBtn.addEventListener('click', function() {
+            composeModal.classList.add('show');
+        });
+        
+        // Close compose modal
+        closeComposeBtn.addEventListener('click', function() {
+            composeModal.classList.remove('show');
+        });
+        
+        // Send message
+        sendBtn.addEventListener('click', function() {
+            const recipient = document.getElementById('recipient').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Basic validation
+            if (!recipient || !subject || !message) {
+                alert('Please fill in all fields.');
+                return;
+            }
+            
+            // Show loader
+            loaderContainer.classList.add('show');
+            composeModal.classList.remove('show');
+            
+            // Simulate sending (replace with actual API call)
+            setTimeout(function() {
+                // Hide loader
+                loaderContainer.classList.remove('show');
+                
+                // Clear form
+                document.getElementById('composeForm').reset();
+                
+                // Show success message
+                alert('Message sent successfully!');
+                
+                // Add to sent folder (this would be handled by the backend in a real app)
+                // For demo purposes we're just showing the UI flow
+            }, 2000);
+        });
+        
+        // Save draft
+        draftBtn.addEventListener('click', function() {
+            const recipient = document.getElementById('recipient').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // At least one field should have content
+            if (!recipient && !subject && !message) {
+                alert('Please add some content to save as draft.');
+                return;
+            }
+            
+            // Show loader
+            loaderContainer.classList.add('show');
+            composeModal.classList.remove('show');
+            
+            // Simulate saving (replace with actual API call)
+            setTimeout(function() {
+                // Hide loader
+                loaderContainer.classList.remove('show');
+                
+                // Show success message
+                alert('Draft saved successfully!');
+                
+                // Would typically update draft count, etc.
+            }, 1500);
+        });
+        
+        // Reply to message
+        replyBtn.addEventListener('click', function() {
+            // Get current message details
+            const subject = document.querySelector('.detail-subject').textContent;
+            const sender = document.querySelector('.sender-name').textContent;
+            
+            // Open compose modal with pre-filled fields
+            composeModal.classList.add('show');
+            document.getElementById('recipient').value = sender;
+            document.getElementById('subject').value = 'Re: ' + subject;
+            document.getElementById('message').focus();
+        });
+        
+        // Switch between folders
+        mailFolders.forEach(folder => {
+            folder.addEventListener('click', function() {
+                // Remove active class from all folders
+                mailFolders.forEach(f => f.classList.remove('active'));
+                
+                // Add active class to clicked folder
+                this.classList.add('active');
+                
+                // In a real app, this would load different messages
+                // For demo, we're just showing the same content
+                
+                // Switch back to list view if in detail view
+                mailDetail.classList.remove('show');
+                mailList.style.display = 'block';
+            });
+        });
+        
+        // Click on contact to start new message
+        mailContacts.forEach(contact => {
+            contact.addEventListener('click', function() {
+                const username = this.getAttribute('data-username');
+                
+                // Open compose modal with recipient pre-filled
+                composeModal.classList.add('show');
+                document.getElementById('recipient').value = username;
+                document.getElementById('subject').focus();
+            });
+        });
+        
+        // Load mail data from Firestore
+        function loadMailData() {
+            const user = firebase.auth().currentUser;
+            if (!user) {
+                console.error('User not authenticated');
+                return;
+            }
+            
+            // Show loader while loading mail
+            loaderContainer.classList.add('show');
+            
+            // In a real implementation, you would load mail from Firestore
+            // For demo, we'll just use a timeout to simulate loading
+            setTimeout(() => {
+                // Hide loader
+                loaderContainer.classList.remove('show');
+                
+                // Update mail badge count (use actual unread count in production)
+                const mailBadge = document.getElementById('mailBadge');
+                if (mailBadge) {
+                    const unreadCount = document.querySelectorAll('.mail-item.unread').length;
+                    mailBadge.textContent = unreadCount;
+                    mailBadge.style.display = unreadCount > 0 ? 'flex' : 'none';
+                }
+                
+                // This is where you would populate the mail list from Firestore data
+            }, 1000);
+        }
+        
+        // Load mail data when page loads
+        loadMailData();
+    });
+</script>
+{% endblock %} 

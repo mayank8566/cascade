@@ -1,0 +1,1284 @@
+{% extends "layout.html" %}
+
+{% block extra_head %}
+<!-- Add Font Awesome CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    /* Intro Animation Overlay */
+    .intro-animation {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.8s ease-out;
+    }
+    
+    .intro-logo-container {
+        position: absolute;
+        z-index: 2;
+        width: 80%;
+        max-width: 800px;
+        opacity: 0;
+        transform: scale(0.8);
+        transition: all 0.8s ease-out;
+    }
+    
+    .intro-logo-svg {
+        width: 100%;
+        filter: drop-shadow(0 0 20px rgba(0, 115, 255, 0.8)) drop-shadow(0 0 40px rgba(160, 0, 255, 0.6));
+    }
+    
+    /* Smoke Animation Canvas */
+    .intro-smoke-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .intro-smoke-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Main Content */
+    .main-content {
+        opacity: 0;
+        transition: opacity 1s ease-out;
+        visibility: hidden;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .main-content.visible {
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .hero {
+        position: relative;
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        padding: 60px 20px;
+        overflow: hidden;
+    }
+    
+    /* Smoke Animation Canvas */
+    .smoke-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+        background: transparent;
+        border-radius: 10px;
+    }
+    
+    .smoke-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border-radius: 10px;
+    }
+    
+    /* Smoke Base Elements */
+    .smoke-yellow {
+        position: absolute;
+        top: -150px;
+        left: -150px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle at center, rgba(255, 215, 0, 0.7) 0%, rgba(255, 215, 0, 0) 80%);
+        border-radius: 10%;
+        filter: blur(20px);
+        opacity: 0;
+        animation: smokeYellowFlow 8s infinite;
+    }
+    
+    .smoke-black {
+        position: absolute;
+        top: -150px;
+        right: -150px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle at center, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 70%);
+        border-radius: 10%;
+        filter: blur(20px);
+        opacity: 0;
+        animation: smokeBlackFlow 8s infinite;
+    }
+    
+    .smoke-fusion {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle at center, 
+            rgba(128, 0, 128, 0.8) 0%, 
+            rgba(128, 0, 128, 0.3) 40%, 
+            rgba(128, 0, 128, 0) 70%);
+        border-radius: 20%;
+        filter: blur(40px);
+        opacity: 0;
+        animation: smokeFusion 8s infinite;
+    }
+    
+    /* Smoke Particles */
+    .smoke-particle {
+        position: absolute;
+        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+        filter: blur(5px);
+        opacity: 0;
+    }
+    
+    /* Smoke Animation Keyframes */
+    @keyframes smokeYellowFlow {
+        0%, 100% { 
+            opacity: 0;
+            transform: translate(0, 0) scale(1);
+        }
+        15% { 
+            opacity: 0.8;
+            transform: translate(100px, 100px) scale(1.5);
+        }
+        40% { 
+            opacity: 0.6;
+            transform: translate(300px, 200px) scale(2);
+        }
+        60% { 
+            opacity: 0.3;
+            transform: translate(400px, 250px) scale(1.8);
+        }
+        80% { 
+            opacity: 0;
+            transform: translate(500px, 300px) scale(1.5);
+        }
+    }
+    
+    @keyframes smokeBlackFlow {
+        0%, 100% { 
+            opacity: 0;
+            transform: translate(0, 0) scale(1);
+        }
+        15% { 
+            opacity: 0.8;
+            transform: translate(-100px, 100px) scale(1.5);
+        }
+        40% { 
+            opacity: 0.6;
+            transform: translate(-300px, 200px) scale(2);
+        }
+        60% { 
+            opacity: 0.3;
+            transform: translate(-400px, 250px) scale(1.8);
+        }
+        80% { 
+            opacity: 0;
+            transform: translate(-500px, 300px) scale(1.5);
+        }
+    }
+    
+    @keyframes smokeFusion {
+        0%, 10%, 90%, 100% { 
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+        }
+        45% { 
+            opacity: 0.2;
+            transform: translate(-50%, -50%) scale(0.5);
+        }
+        60% { 
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        75% { 
+            opacity: 0.3;
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 40px;
+        border-radius: 15px;
+        backdrop-filter: blur(5px);
+        width: 90%;
+        max-width: 800px;
+        text-align: center;
+        margin: 0 auto;
+        animation: fadeInUp 1s ease-out;
+        border: 1px solid rgba(0, 115, 255, 0.3);
+        box-shadow: 0 0 30px rgba(0, 115, 255, 0.2);
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        color: #fff;
+        text-shadow: 0 0 15px rgba(0, 115, 255, 0.8), 0 0 30px rgba(160, 0, 255, 0.6);
+        letter-spacing: 4px;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+        color: #0073ff;
+        font-weight: 500;
+    }
+    
+    .hero-description {
+        margin-bottom: 30px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+        .hero {
+            min-height: 500px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+        }
+        
+        .intro-logo-container {
+            width: 90%;
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Add a background gradient to the body when main content is visible */
+    body {
+        background: #000000;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .body-gradient {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+        z-index: -1;
+    }
+
+    /* Alliance Sections Styles */
+    .alliances {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 20px;
+    }
+
+    .alliance-container {
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .alliance-section {
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 15px;
+        padding: 30px;
+        position: relative;
+        backdrop-filter: blur(5px);
+        overflow: hidden;
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    .alliance-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+    }
+
+    .allies::before {
+        background: linear-gradient(90deg, #0073ff, #a000ff);
+    }
+
+    .enemies::before {
+        background: linear-gradient(90deg, #ff0000, #ff7700);
+    }
+
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 25px;
+        text-align: center;
+        position: relative;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    .allies .section-title {
+        color: #0073ff;
+        text-shadow: 0 0 10px rgba(0, 115, 255, 0.5);
+    }
+
+    .enemies .section-title {
+        color: #ff3d00;
+        text-shadow: 0 0 10px rgba(255, 61, 0, 0.5);
+    }
+
+    .alliance-content {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .allies .alliance-content {
+        flex-direction: row;
+    }
+
+    .enemies .alliance-content {
+        flex-direction: row-reverse;
+    }
+
+    .alliance-list {
+        flex: 1;
+        list-style: none;
+        padding: 0;
+        columns: 2;
+        column-gap: 40px;
+    }
+
+    .alliance-list li {
+        margin-bottom: 15px;
+        position: relative;
+        padding-left: 25px;
+        break-inside: avoid;
+        transition: transform 0.3s ease, padding-left 0.3s ease;
+    }
+
+    .alliance-list li:hover {
+        transform: translateX(5px);
+        padding-left: 30px;
+    }
+
+    .alliance-list li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 15px;
+        height: 15px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .alliance-list li:hover::before {
+        transform: translateY(-50%) scale(1.2);
+        opacity: 0.8;
+    }
+
+    .allies .alliance-list li::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%230073ff' d='M470.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L192 338.7 425.4 105.4c12.5-12.5 32.8-12.5 45.3 0z'/%3E%3C/svg%3E");
+    }
+
+    .enemies .alliance-list li::before {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23ff3d00' d='M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zm-81-207l-17-17 161-161 17 17-161 161z'/%3E%3C/svg%3E");
+    }
+
+    .alliance-link {
+        color: #fff;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        display: inline-block;
+    }
+
+    .alliance-link::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        transition: width 0.3s ease;
+    }
+
+    .allies .alliance-link::after {
+        background: #0073ff;
+    }
+
+    .enemies .alliance-link::after {
+        background: #ff3d00;
+    }
+
+    .alliance-link:hover::after {
+        width: 100%;
+    }
+
+    .alliance-image {
+        flex: 0 0 300px;
+        height: 300px;
+        border-radius: 10px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+    }
+
+    .alliance-image:hover {
+        transform: scale(1.03);
+    }
+
+    .allies-image {
+        background-image: url('https://i.ibb.co/fGw8K0V/allies.png');
+        border: 2px solid rgba(0, 115, 255, 0.5);
+    }
+
+    .enemies-image {
+        background-image: url('https://i.ibb.co/PchZSnL/enemies.png');
+        border: 2px solid rgba(255, 61, 0, 0.5);
+    }
+
+    /* Footer Styles */
+    .site-footer {
+        background: rgba(0, 0, 0, 0.8);
+        padding: 60px 0 20px;
+        margin-top: auto;
+        position: relative;
+        backdrop-filter: blur(10px);
+        width: 100%;
+        /* Force visibility */
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    .site-footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #0073ff, #a000ff, #0073ff);
+        background-size: 200% 100%;
+        animation: gradientFlow 5s linear infinite;
+    }
+
+    @keyframes gradientFlow {
+        0% {
+            background-position: 0% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 40px;
+    }
+
+    .footer-logo {
+        flex: 0 0 300px;
+    }
+
+    .footer-title {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        color: #fff;
+        text-shadow: 0 0 15px rgba(0, 115, 255, 0.5);
+        letter-spacing: 3px;
+    }
+
+    .footer-slogan {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1rem;
+        font-style: italic;
+    }
+
+    .footer-links {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+
+    .footer-column {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    .footer-column h3 {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        color: #0073ff;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .footer-column h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 40px;
+        height: 2px;
+        background: #0073ff;
+    }
+
+    .footer-column ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-column li {
+        margin-bottom: 10px;
+    }
+
+    .footer-column a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .footer-column a:hover {
+        color: #0073ff;
+        transform: translateX(3px);
+        display: inline-block;
+    }
+
+    .footer-bottom {
+        max-width: 1200px;
+        margin: 40px auto 0;
+        padding: 20px 20px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-copyright {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+    }
+
+    .footer-social {
+        display: flex;
+        gap: 15px;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        transition: all 0.3s ease;
+        font-size: 1.2rem;
+    }
+
+    .social-icon:hover {
+        background: #0073ff;
+        transform: translateY(-3px);
+    }
+
+    @media (max-width: 992px) {
+        .alliance-content {
+            flex-direction: column !important;
+        }
+        
+        .alliance-image {
+            width: 100%;
+            flex: 0 0 200px;
+        }
+        
+        .alliance-list {
+            columns: 2;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            min-height: 500px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+        }
+        
+        .intro-logo-container {
+            width: 90%;
+        }
+        
+        .footer-content {
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .footer-logo {
+            text-align: center;
+            flex: 0 0 auto;
+        }
+        
+        .footer-links {
+            width: 100%;
+        }
+        
+        .footer-bottom {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .footer-copyright {
+            margin-bottom: 10px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .alliance-list {
+            columns: 1;
+        }
+        
+        .footer-links {
+            flex-direction: column;
+        }
+    }
+
+    /* Scroll animations */
+    .fade-in-element {
+        opacity: 0.2;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in-element.appear {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Enhanced Feature Cards */
+    .features {
+        max-width: 1200px;
+        margin: 60px auto;
+        padding: 0 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .feature-card {
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 15px;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        flex: 1;
+        min-width: 250px;
+        max-width: 350px;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(0, 115, 255, 0.1);
+        /* Force visibility */
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30%;
+        height: 4px;
+        background: linear-gradient(90deg, #0073ff, #a000ff);
+        transition: width 0.4s ease;
+        border-radius: 0 0 4px 4px;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0, 115, 255, 0.2);
+        border-color: rgba(0, 115, 255, 0.3);
+    }
+
+    .feature-card:hover::before {
+        width: 80%;
+    }
+
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        background: rgba(0, 0, 0, 0.4);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        font-size: 2.5rem;
+        position: relative;
+        transition: all 0.4s ease;
+        z-index: 1;
+    }
+
+    .feature-card:hover .feature-icon {
+        transform: scale(1.1);
+        background: rgba(0, 115, 255, 0.2);
+    }
+
+    .feature-icon::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, rgba(0, 115, 255, 0.3) 0%, rgba(160, 0, 255, 0.1) 70%, transparent 100%);
+        border-radius: 50%;
+        opacity: 0;
+        z-index: -1;
+        transition: opacity 0.4s ease;
+    }
+
+    .feature-card:hover .feature-icon::after {
+        opacity: 1;
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+        50% {
+            transform: scale(1.2);
+            opacity: 0.3;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0.5;
+        }
+    }
+
+    .feature-card h3 {
+        font-size: 1.6rem;
+        margin-bottom: 15px;
+        color: #fff;
+        position: relative;
+        padding-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover h3 {
+        color: #0073ff;
+    }
+
+    .feature-card h3::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 2px;
+        background: #0073ff;
+        transition: width 0.3s ease;
+    }
+
+    .feature-card:hover h3::after {
+        width: 50px;
+    }
+
+    .feature-card p {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 1rem;
+        line-height: 1.6;
+        transition: all 0.3s ease;
+    }
+
+    .feature-card:hover p {
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .feature-icon i {
+        font-size: 2.5rem;
+        color: #0073ff;
+        text-shadow: 0 0 10px rgba(0, 115, 255, 0.3);
+    }
+
+    .feature-card:hover .feature-icon i {
+        color: #0073ff;
+        text-shadow: 0 0 10px rgba(0, 115, 255, 0.5);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Intro Animation Overlay -->
+<div class="intro-animation" id="introAnimation">
+    <div class="intro-smoke-container">
+        <canvas id="introSmokeCanvas" class="intro-smoke-canvas"></canvas>
+    </div>
+    <div class="intro-logo-container" id="introLogo">
+        <svg class="intro-logo-svg" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- C -->
+            <path d="M120 40 C70 40, 40 70, 40 100 C40 130, 70 160, 120 160 L140 160 L140 130 L120 130 C95 130, 80 115, 80 100 C80 85, 95 70, 120 70 L140 70 L140 40 Z" fill="#fff"/>
+            
+            <!-- A -->
+            <path d="M200 40 L170 160 L210 160 L215 140 L255 140 L260 160 L300 160 L270 40 Z M225 110 L235 70 L245 110 Z" fill="#fff"/>
+            
+            <!-- S -->
+            <path d="M370 40 L320 40 L320 70 L350 70 C365 70, 380 75, 380 90 C380 105, 365 110, 350 110 L340 110 L340 90 L320 90 L320 140 L370 140 C395 140, 420 125, 420 100 C420 75, 395 40, 370 40 Z" fill="#fff"/>
+            
+            <!-- C -->
+            <path d="M500 40 C450 40, 420 70, 420 100 C420 130, 450 160, 500 160 L520 160 L520 130 L500 130 C475 130, 460 115, 460 100 C460 85, 475 70, 500 70 L520 70 L520 40 Z" fill="#fff"/>
+            
+            <!-- A -->
+            <path d="M580 40 L550 160 L590 160 L595 140 L635 140 L640 160 L680 160 L650 40 Z M605 110 L615 70 L625 110 Z" fill="#fff"/>
+            
+            <!-- D -->
+            <path d="M700 40 L700 160 L740 160 C780 160, 810 130, 810 100 C810 70, 780 40, 740 40 Z M740 70 C760 70, 770 85, 770 100 C770 115, 760 130, 740 130 L730 130 L730 70 Z" fill="#fff"/>
+            
+            <!-- Glow overlay -->
+            <g style="mix-blend-mode: overlay;">
+                <path d="M120 40 C70 40, 40 70, 40 100 C40 130, 70 160, 120 160 L140 160 L140 130 L120 130 C95 130, 80 115, 80 100 C80 85, 95 70, 120 70 L140 70 L140 40 Z" fill="url(#blueGlow)"/>
+                <path d="M200 40 L170 160 L210 160 L215 140 L255 140 L260 160 L300 160 L270 40 Z M225 110 L235 70 L245 110 Z" fill="url(#purpleGlow)"/>
+                <path d="M370 40 L320 40 L320 70 L350 70 C365 70, 380 75, 380 90 C380 105, 365 110, 350 110 L340 110 L340 90 L320 90 L320 140 L370 140 C395 140, 420 125, 420 100 C420 75, 395 40, 370 40 Z" fill="url(#blueGlow)"/>
+                <path d="M500 40 C450 40, 420 70, 420 100 C420 130, 450 160, 500 160 L520 160 L520 130 L500 130 C475 130, 460 115, 460 100 C460 85, 475 70, 500 70 L520 70 L520 40 Z" fill="url(#purpleGlow)"/>
+                <path d="M580 40 L550 160 L590 160 L595 140 L635 140 L640 160 L680 160 L650 40 Z M605 110 L615 70 L625 110 Z" fill="url(#blueGlow)"/>
+                <path d="M700 40 L700 160 L740 160 C780 160, 810 130, 810 100 C810 70, 780 40, 740 40 Z M740 70 C760 70, 770 85, 770 100 C770 115, 760 130, 740 130 L730 130 L730 70 Z" fill="url(#purpleGlow)"/>
+            </g>
+            
+            <!-- Gradients -->
+            <defs>
+                <linearGradient id="blueGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0073ff" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#00c6ff" stop-opacity="0.6"/>
+                </linearGradient>
+                <linearGradient id="purpleGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#a000ff" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="#e100ff" stop-opacity="0.6"/>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+</div>
+
+<!-- Main Content (initially hidden) -->
+<div class="main-content" id="mainContent">
+    <div class="body-gradient"></div>
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">CASCADE</h1>
+            <p class="hero-subtitle">The Ultimate Minecraft Alliance</p>
+            <div class="hero-description">
+                <p>Born from the alliance of teams RUPTURES and FAITH</p>
+                <p>Dominating the Minecraft universe one block at a time</p>
+            </div>
+            <div class="cta-buttons">
+                <a href="/about" class="btn btn-primary">Our Story</a>
+                <a href="/team" class="btn btn-secondary">Meet The Team</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <h3>Elite Skills</h3>
+            <p>Our team members are masters of PvP, building, and survival strategies.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-handshake"></i>
+            </div>
+            <h3>United Forces</h3>
+            <p>The strength of RUPTURES combined with the strategy of FAITH.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">
+                <i class="fas fa-globe"></i>
+            </div>
+            <h3>Cosmic Dominance</h3>
+            <p>Expanding our influence across multiple servers and realms.</p>
+        </div>
+    </section>
+
+    <section class="alliances">
+        <div class="alliance-container">
+            <div class="alliance-section allies">
+                <h2 class="section-title">Allies OF Cascade</h2>
+                <div class="alliance-content">
+                    <ul class="alliance-list">
+                        <li><a href="#" class="alliance-link">Valeree</a></li>
+                        <li><a href="#" class="alliance-link">Vengeance</a></li>
+                        <li><a href="#" class="alliance-link">Predators</a></li>
+                        <li><a href="#" class="alliance-link">RGS</a></li>
+                        <li><a href="#" class="alliance-link">Surge</a></li>
+                        <li><a href="#" class="alliance-link">SoulSociety</a></li>
+                        <li><a href="#" class="alliance-link">Invincibles</a></li>
+                        <li><a href="#" class="alliance-link">TeamHades</a></li>
+                        <li><a href="#" class="alliance-link">NexuS</a></li>
+                        <li><a href="#" class="alliance-link">Team Low</a></li>
+                        <li><a href="#" class="alliance-link">Arch</a></li>
+                        <li><a href="#" class="alliance-link">Elite</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alliance-section enemies">
+                <h2 class="section-title">Enemy Clans</h2>
+                <div class="alliance-content">
+                    <ul class="alliance-list">
+                        <li><a href="#" class="alliance-link">Invictus</a></li>
+                        <li><a href="#" class="alliance-link">Divine</a></li>
+                        <li><a href="#" class="alliance-link">Cripsnblood (Chips)</a></li>
+                        <li><a href="#" class="alliance-link">VRassassins</a></li>
+                        <li><a href="#" class="alliance-link">GodFathers</a></li>
+                        <li><a href="#" class="alliance-link">TeamSpectrum</a></li>
+                        <li><a href="#" class="alliance-link">Leaf</a></li>
+                        <li><a href="#" class="alliance-link">CSM</a></li>
+                        <li><a href="#" class="alliance-link">CEAS</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <h2 class="footer-title">CASCADE</h2>
+                <p class="footer-slogan">United We Dominate</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/about">About</a></li>
+                        <li><a href="/team">Team</a></li>
+                        <li><a href="/roster">Roster</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Rosters</h3>
+                    <ul>
+                        <li><a href="/roster/npot">NPOT</a></li>
+                        <li><a href="/roster/sword">Sword</a></li>
+                        <li><a href="/roster/uhc">UHC</a></li>
+                        <li><a href="/roster/smp">SMP</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Join Us</h3>
+                    <ul>
+                        <li><a href="/register">Register</a></li>
+                        <li><a href="https://discord.gg/cascade" target="_blank">Discord</a></li>
+                        <li><a href="mailto:contact@cascade.gg">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                <p>&copy; 2024 CASCADE. All rights reserved.</p>
+            </div>
+            <div class="footer-social">
+                <a href="#" class="social-icon" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitch"><i class="fab fa-twitch"></i></a>
+            </div>
+        </div>
+    </footer>
+</div>
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Intro Animation Logic
+        const introAnimation = document.getElementById('introAnimation');
+        const introLogo = document.getElementById('introLogo');
+        const mainContent = document.getElementById('mainContent');
+        
+        // Initialize intro smoke animation
+        const introCanvas = document.getElementById('introSmokeCanvas');
+        const introCtx = introCanvas.getContext('2d');
+        
+        // Set canvas dimensions
+        function resizeCanvas() {
+            // Intro canvas
+            introCanvas.width = window.innerWidth;
+            introCanvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        // Smoke particle class (for intro)
+        class IntroSmokeParticle {
+            constructor(x, y, size, color, vx, vy, life, type) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.origSize = size;
+                this.color = color;
+                this.vx = vx;
+                this.vy = vy;
+                this.life = life;
+                this.maxLife = life;
+                this.type = type; // "yellow", "black", or "purple"
+                this.opacity = 0;
+                this.growing = true;
+            }
+            
+            update() {
+                // Update position
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Update life
+                this.life--;
+                
+                // Update opacity and size based on life stage
+                if (this.growing && this.life > this.maxLife * 0.7) {
+                    this.opacity = 1 - (this.life / this.maxLife);
+                    this.size = this.origSize * (1 + (this.maxLife - this.life) / this.maxLife);
+                } else {
+                    this.growing = false;
+                    this.opacity = this.life / this.maxLife;
+                    this.size = this.origSize * (this.life / this.maxLife + 0.5);
+                }
+                
+                // For yellow and black particles, if they get close to center, change velocity
+                if ((this.type === 'yellow' || this.type === 'black') && 
+                    Math.abs(this.x - introCanvas.width/2) < 100 && 
+                    Math.abs(this.y - introCanvas.height/2) < 100) {
+                    
+                    // Higher chance to transform into purple during intro animation
+                    if (Math.random() < 0.2) {
+                        this.type = 'purple';
+                        this.color = 'rgba(128, 0, 128,'; 
+                        this.life = Math.min(this.life, 30);
+                        this.maxLife = this.life;
+                        this.vx *= 0.5;
+                        this.vy *= 0.5;
+                    }
+                }
+                
+                return this.life > 0;
+            }
+            
+            draw() {
+                introCtx.beginPath();
+                const gradient = introCtx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.size
+                );
+                gradient.addColorStop(0, `${this.color}${this.opacity})`);
+                gradient.addColorStop(1, `${this.color}0)`);
+                
+                introCtx.fillStyle = gradient;
+                introCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                introCtx.fill();
+            }
+        }
+        
+        // Smoke intro animation
+        const introParticles = [];
+        let introAnimationTime = 0;
+        const introAnimationDuration = 4000; // 4 seconds
+        let introAnimationComplete = false;
+        let animationFrame;
+        
+        function generateIntroParticles() {
+            // Yellow smoke from top left (more intense for intro)
+            if (Math.random() < 0.3) {
+                const x = Math.random() * introCanvas.width * 0.2;
+                const y = Math.random() * introCanvas.height * 0.2;
+                const size = 30 + Math.random() * 70;
+                const vx = 0.8 + Math.random() * 2;
+                const vy = 0.8 + Math.random() * 2;
+                const life = 100 + Math.random() * 100;
+                introParticles.push(new IntroSmokeParticle(x, y, size, 'rgba(255, 215, 0,', vx, vy, life, 'yellow'));
+            }
+            
+            // Black smoke from top right (more intense for intro)
+            if (Math.random() < 0.3) {
+                const x = introCanvas.width - (Math.random() * introCanvas.width * 0.2);
+                const y = Math.random() * introCanvas.height * 0.2;
+                const size = 30 + Math.random() * 70;
+                const vx = -0.8 - Math.random() * 2;
+                const vy = 0.8 + Math.random() * 2;
+                const life = 100 + Math.random() * 100;
+                introParticles.push(new IntroSmokeParticle(x, y, size, 'rgba(0, 0, 0,', vx, vy, life, 'black'));
+            }
+            
+            // Generate purple particles in the center as animation progresses
+            if (introAnimationTime > introAnimationDuration * 0.5 && Math.random() < 0.2) {
+                const x = introCanvas.width/2 + (Math.random() - 0.5) * 150;
+                const y = introCanvas.height/2 + (Math.random() - 0.5) * 150;
+                const size = 50 + Math.random() * 80;
+                const vx = (Math.random() - 0.5) * 0.5;
+                const vy = (Math.random() - 0.5) * 0.5;
+                const life = 50 + Math.random() * 80;
+                introParticles.push(new IntroSmokeParticle(x, y, size, 'rgba(128, 0, 128,', vx, vy, life, 'purple'));
+            }
+        }
+        
+        function animateIntro(timestamp) {
+            if (!introAnimationStartTime) {
+                introAnimationStartTime = timestamp;
+            }
+            
+            introAnimationTime = timestamp - introAnimationStartTime;
+            
+            // Clear canvas
+            introCtx.clearRect(0, 0, introCanvas.width, introCanvas.height);
+            
+            // Generate new particles
+            generateIntroParticles();
+            
+            // Update and draw particles
+            for (let i = introParticles.length - 1; i >= 0; i--) {
+                const particle = introParticles[i];
+                const isAlive = particle.update();
+                
+                if (isAlive) {
+                    particle.draw();
+                } else {
+                    introParticles.splice(i, 1);
+                }
+            }
+            
+            // Show logo at halfway point
+            if (introAnimationTime > introAnimationDuration * 0.65 && !introAnimationComplete) {
+                introLogo.style.opacity = '1';
+                introLogo.style.transform = 'scale(1)';
+            }
+            
+            // End animation after duration
+            if (introAnimationTime < introAnimationDuration) {
+                animationFrame = requestAnimationFrame(animateIntro);
+            } else if (!introAnimationComplete) {
+                introAnimationComplete = true;
+                
+                // Fade out intro
+                setTimeout(() => {
+                    introAnimation.style.opacity = '0';
+                    mainContent.classList.add('visible');
+                    
+                    // Remove intro after fade out
+                    setTimeout(() => {
+                        introAnimation.style.display = 'none';
+                        cancelAnimationFrame(animationFrame);
+                    }, 800);
+                }, 1000);
+            }
+        }
+        
+        let introAnimationStartTime = null;
+        
+        // Start intro animation
+        requestAnimationFrame(animateIntro);
+        
+        // Scroll animation logic
+        const fadeElements = document.querySelectorAll('.feature-card, .alliance-section, .site-footer');
+        
+        // Add fade-in-element class to all elements we want to animate on scroll
+        fadeElements.forEach(element => {
+            element.classList.add('fade-in-element');
+        });
+        
+        // Check if element is in viewport
+        function isElementInViewport(el) {
+            const rect = el.getBoundingClientRect();
+            return (
+                rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85
+            );
+        }
+        
+        // Check all elements on scroll
+        function checkElements() {
+            fadeElements.forEach(element => {
+                if (isElementInViewport(element)) {
+                    element.classList.add('appear');
+                }
+            });
+        }
+        
+        // Run once on page load after intro animation
+        setTimeout(() => {
+            checkElements();
+        }, introAnimationDuration + 1500);
+        
+        // Add scroll event listener
+        window.addEventListener('scroll', checkElements);
+    });
+</script>
+{% endblock %}
+{% endblock %} 

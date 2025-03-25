@@ -1,0 +1,667 @@
+{% extends "layout.html" %}
+{% block extra_head %}
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-storage-compat.js"></script>
+<style>
+    .profile-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    @media (min-width: 768px) {
+        .profile-container {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+    
+    .profile-section {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 115, 255, 0.3);
+        border-radius: 10px;
+        padding: 30px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .section-header {
+        margin-bottom: 25px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    
+    .section-header h2 {
+        color: #fff;
+        font-size: 1.8rem;
+    }
+    
+    .section-header::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 3px;
+        background: linear-gradient(90deg, #0073ff, #a000ff);
+    }
+    
+    .avatar-upload {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-bottom: 20px;
+        border: 3px solid rgba(0, 115, 255, 0.5);
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .avatar-preview:hover {
+        box-shadow: 0 0 15px rgba(0, 115, 255, 0.7);
+    }
+    
+    .avatar-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+    
+    .avatar-preview:hover img {
+        transform: scale(1.05);
+    }
+    
+    .avatar-preview::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .avatar-preview:hover::after {
+        opacity: 1;
+    }
+    
+    .upload-btn-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+    
+    .btn-upload {
+        border: 2px solid #a000ff;
+        color: white;
+        background-color: rgba(160, 0, 255, 0.2);
+        padding: 8px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+    
+    .btn-upload svg {
+        margin-right: 8px;
+        width: 18px;
+        height: 18px;
+    }
+    
+    .btn-upload:hover {
+        background-color: rgba(160, 0, 255, 0.3);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(160, 0, 255, 0.2);
+    }
+    
+    .upload-btn-wrapper input[type=file] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        cursor: pointer;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .upload-progress {
+        width: 100%;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        margin-bottom: 10px;
+        display: none;
+        overflow: hidden;
+    }
+    
+    .upload-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #0073ff, #a000ff);
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+    
+    .upload-message {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 10px;
+        text-align: center;
+        display: none;
+    }
+    
+    .upload-error {
+        color: #ff4d4d;
+    }
+    
+    .upload-success {
+        color: #4dff4d;
+    }
+    
+    .profile-form .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .profile-success, .security-success {
+        display: none;
+        padding: 10px;
+        margin-top: 15px;
+        border-radius: 5px;
+        background: rgba(0, 255, 0, 0.1);
+        border-left: 3px solid #00ff00;
+        color: #00ff00;
+    }
+    
+    .tabs {
+        display: flex;
+        margin-bottom: 30px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .tab.active {
+        border-bottom: 3px solid #a000ff;
+        color: #fff;
+    }
+    
+    .tab:hover:not(.active) {
+        border-bottom: 3px solid rgba(160, 0, 255, 0.3);
+        color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .file-size-limit {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 5px;
+        text-align: center;
+    }
+    
+    @media (max-width: 767px) {
+        .profile-container {
+            padding: 0 15px;
+        }
+        
+        .tab {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Edit Profile</h1>
+    <div class="cosmic-divider"></div>
+</div>
+
+<div class="tabs">
+    <div class="tab active" data-tab="profile">User</div>
+    <div class="tab" data-tab="security">Security</div>
+</div>
+
+<div class="profile-container">
+    <!-- User Profile Section -->
+    <div class="profile-section" id="profile-section">
+        <div class="section-header">
+            <h2>User Information</h2>
+        </div>
+        
+        <form class="profile-form" id="profile-form">
+            <div class="avatar-upload">
+                <div class="avatar-preview">
+                    <img id="avatar-preview-img" src="{{ url_for('static', filename='images/default-avatar.svg') }}" alt="Profile Picture">
+                </div>
+                <div class="upload-btn-wrapper">
+                    <button class="btn-upload">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        Upload Photo
+                    </button>
+                    <input type="file" id="avatar-upload" accept="image/*" />
+                    <div class="upload-progress">
+                        <div class="upload-progress-bar" id="upload-progress-bar"></div>
+                    </div>
+                    <div class="upload-message" id="upload-message"></div>
+                    <div class="file-size-limit">Maximum file size: 2MB</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="display-name">Name</label>
+                <input type="text" id="display-name" class="form-control" placeholder="Your name">
+            </div>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" class="form-control" placeholder="Your username">
+            </div>
+            
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" class="form-control" rows="4" placeholder="Tell us about yourself"></textarea>
+            </div>
+            
+            <button type="submit" class="auth-btn">Save Changes</button>
+            <div class="profile-success" id="profile-success">Profile updated successfully!</div>
+        </form>
+    </div>
+    
+    <!-- Security Section -->
+    <div class="profile-section" id="security-section" style="display: none;">
+        <div class="section-header">
+            <h2>Security</h2>
+        </div>
+        
+        <form class="profile-form" id="password-form">
+            <div class="form-group">
+                <label for="current-password">Current Password</label>
+                <input type="password" id="current-password" class="form-control" placeholder="Current password">
+            </div>
+            
+            <div class="form-group">
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password" class="form-control" placeholder="New password">
+                <div class="password-strength">
+                    <div class="strength-bar" id="strength-bar"></div>
+                </div>
+                <span class="strength-text" id="strength-text">Password strength</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password">Confirm New Password</label>
+                <input type="password" id="confirm-password" class="form-control" placeholder="Confirm new password">
+            </div>
+            
+            <button type="submit" class="auth-btn">Change Password</button>
+            <div class="error-message" id="password-error"></div>
+            <div class="security-success" id="security-success">Password changed successfully!</div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab switching
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.getElementById('profile-section').style.display = 'none';
+                document.getElementById('security-section').style.display = 'none';
+                
+                // Show the selected section
+                const tabName = this.getAttribute('data-tab');
+                if (tabName === 'profile') {
+                    document.getElementById('profile-section').style.display = 'block';
+                } else if (tabName === 'security') {
+                    document.getElementById('security-section').style.display = 'block';
+                }
+            });
+        });
+        
+        // Initialize Firebase Firestore and Storage
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        
+        // Elements for photo upload
+        const uploadProgress = document.querySelector('.upload-progress');
+        const progressBar = document.getElementById('upload-progress-bar');
+        const uploadMessage = document.getElementById('upload-message');
+        
+        // Check if user is logged in
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // Load user data
+                loadUserData(user);
+                
+                // Handle profile form submission
+                document.getElementById('profile-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    updateProfile(user);
+                });
+                
+                // Handle password form submission
+                document.getElementById('password-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    changePassword(user);
+                });
+                
+                // Handle avatar upload
+                document.getElementById('avatar-upload').addEventListener('change', function(e) {
+                    if (e.target.files.length > 0) {
+                        const file = e.target.files[0];
+                        
+                        // Validate file type
+                        if (!file.type.match('image.*')) {
+                            showUploadMessage('Please select an image file (JPG, PNG, GIF)', true);
+                            return;
+                        }
+                        
+                        // Validate file size (2MB max)
+                        if (file.size > 2 * 1024 * 1024) {
+                            showUploadMessage('File size exceeds 2MB limit', true);
+                            return;
+                        }
+                        
+                        // Create a preview of the selected image
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            document.getElementById('avatar-preview-img').src = e.target.result;
+                        }
+                        reader.readAsDataURL(file);
+                        
+                        // Upload the file
+                        uploadAvatar(file, user);
+                    }
+                });
+                
+                // Password strength meter
+                document.getElementById('new-password').addEventListener('input', checkPasswordStrength);
+            } else {
+                // User is not logged in, redirect to login page
+                window.location.href = '/login';
+            }
+        });
+        
+        // Load user data from Firestore
+        function loadUserData(user) {
+            db.collection('users').doc(user.uid).get().then(doc => {
+                if (doc.exists) {
+                    const userData = doc.data();
+                    document.getElementById('display-name').value = userData.displayName || '';
+                    document.getElementById('username').value = userData.username || '';
+                    document.getElementById('bio').value = userData.bio || '';
+                    
+                    // Set profile picture if it exists
+                    if (user.photoURL) {
+                        document.getElementById('avatar-preview-img').src = user.photoURL;
+                    } else if (userData.photoURL) {
+                        document.getElementById('avatar-preview-img').src = userData.photoURL;
+                    }
+                }
+            }).catch(error => {
+                console.error("Error getting user data:", error);
+            });
+        }
+        
+        // Update user profile in Firestore and Auth
+        function updateProfile(user) {
+            const displayName = document.getElementById('display-name').value;
+            const username = document.getElementById('username').value;
+            const bio = document.getElementById('bio').value;
+            
+            // Update Auth profile
+            user.updateProfile({
+                displayName: displayName
+            }).then(() => {
+                // Update Firestore document
+                return db.collection('users').doc(user.uid).update({
+                    displayName: displayName,
+                    username: username,
+                    bio: bio,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }).then(() => {
+                // Show success message
+                const success = document.getElementById('profile-success');
+                success.style.display = 'block';
+                setTimeout(() => {
+                    success.style.display = 'none';
+                }, 3000);
+                
+                // Update profile photo and name in the header
+                if (document.getElementById('profile-photo')) {
+                    document.getElementById('profile-photo').src = user.photoURL || '/static/images/default-avatar.svg';
+                }
+            }).catch(error => {
+                console.error("Error updating profile:", error);
+            });
+        }
+        
+        // Upload avatar to Firebase Storage with progress tracking
+        function uploadAvatar(file, user) {
+            // Reset upload UI
+            progressBar.style.width = '0%';
+            uploadProgress.style.display = 'block';
+            showUploadMessage('Uploading...', false);
+            
+            // Create a storage reference
+            const storageRef = storage.ref();
+            const timestamp = new Date().getTime();
+            const fileExtension = file.name.split('.').pop();
+            const avatarRef = storageRef.child(`avatars/${user.uid}/profile_${timestamp}.${fileExtension}`);
+            
+            // Create the upload task
+            const uploadTask = avatarRef.put(file);
+            
+            // Monitor upload progress
+            uploadTask.on('state_changed',
+                // Progress function
+                function(snapshot) {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    progressBar.style.width = progress + '%';
+                },
+                // Error function
+                function(error) {
+                    console.error("Upload failed:", error);
+                    showUploadMessage('Upload failed: ' + error.message, true);
+                    uploadProgress.style.display = 'none';
+                },
+                // Complete function
+                function() {
+                    // Get download URL
+                    uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+                        // Preview image (already done with FileReader)
+                        
+                        // Update user profile
+                        return user.updateProfile({
+                            photoURL: downloadURL
+                        });
+                    }).then(() => {
+                        // Update profile photo in header
+                        if (document.getElementById('profile-photo')) {
+                            document.getElementById('profile-photo').src = user.photoURL;
+                        }
+                        
+                        // Update Firestore document
+                        return db.collection('users').doc(user.uid).update({
+                            photoURL: user.photoURL,
+                            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }).then(() => {
+                        showUploadMessage('Photo updated successfully!', false, true);
+                        setTimeout(() => {
+                            uploadProgress.style.display = 'none';
+                            uploadMessage.style.display = 'none';
+                        }, 3000);
+                    }).catch(error => {
+                        console.error("Error updating profile:", error);
+                        showUploadMessage('Error updating profile: ' + error.message, true);
+                    });
+                }
+            );
+        }
+        
+        // Helper function to show upload message
+        function showUploadMessage(message, isError, isSuccess) {
+            uploadMessage.textContent = message;
+            uploadMessage.style.display = 'block';
+            uploadMessage.className = 'upload-message';
+            
+            if (isError) {
+                uploadMessage.classList.add('upload-error');
+            }
+            if (isSuccess) {
+                uploadMessage.classList.add('upload-success');
+            }
+        }
+        
+        // Change password
+        function changePassword(user) {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorElement = document.getElementById('password-error');
+            
+            // Clear previous errors
+            errorElement.textContent = '';
+            errorElement.style.display = 'none';
+            
+            // Check if passwords match
+            if (newPassword !== confirmPassword) {
+                errorElement.textContent = 'New passwords do not match';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            // Check password strength
+            if (getPasswordStrength(newPassword) < 2) {
+                errorElement.textContent = 'Password is too weak';
+                errorElement.style.display = 'block';
+                return;
+            }
+            
+            // Reauthenticate user
+            const credential = firebase.auth.EmailAuthProvider.credential(
+                user.email, 
+                currentPassword
+            );
+            
+            user.reauthenticateWithCredential(credential).then(() => {
+                // User reauthenticated, now change password
+                return user.updatePassword(newPassword);
+            }).then(() => {
+                // Password updated successfully
+                // Clear form
+                document.getElementById('current-password').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('confirm-password').value = '';
+                document.getElementById('strength-bar').style.width = '0%';
+                document.getElementById('strength-text').textContent = 'Password strength';
+                
+                // Show success message
+                const success = document.getElementById('security-success');
+                success.style.display = 'block';
+                setTimeout(() => {
+                    success.style.display = 'none';
+                }, 3000);
+            }).catch(error => {
+                // An error happened
+                console.error("Error changing password:", error);
+                
+                let errorMessage = 'Failed to change password.';
+                if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Current password is incorrect.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'New password is too weak.';
+                }
+                
+                errorElement.textContent = errorMessage;
+                errorElement.style.display = 'block';
+            });
+        }
+        
+        // Password strength checker
+        function checkPasswordStrength() {
+            const password = document.getElementById('new-password').value;
+            const strengthBar = document.getElementById('strength-bar');
+            const strengthText = document.getElementById('strength-text');
+            
+            const strength = getPasswordStrength(password);
+            let color, width, text;
+            
+            if (strength === 0) {
+                color = '#ff0000';
+                width = '20%';
+                text = 'Very weak';
+            } else if (strength === 1) {
+                color = '#ff6600';
+                width = '40%';
+                text = 'Weak';
+            } else if (strength === 2) {
+                color = '#ffcc00';
+                width = '60%';
+                text = 'Medium';
+            } else if (strength === 3) {
+                color = '#99cc00';
+                width = '80%';
+                text = 'Strong';
+            } else {
+                color = '#00cc00';
+                width = '100%';
+                text = 'Very strong';
+            }
+            
+            strengthBar.style.backgroundColor = color;
+            strengthBar.style.width = width;
+            strengthText.textContent = text;
+        }
+        
+        // Calculate password strength (0-4)
+        function getPasswordStrength(password) {
+            let strength = 0;
+            
+            if (password.length >= 8) strength++;
+            if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
+            if (password.match(/\d/)) strength++;
+            if (password.match(/[^a-zA-Z\d]/)) strength++;
+            
+            return strength;
+        }
+    });
+</script>
+{% endblock %} 

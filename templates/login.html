@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Login to CASCADE</h2>
+            <div class="cosmic-divider"></div>
+        </div>
+        
+        <form class="auth-form" id="loginForm">
+            <div class="error-message" id="errorMsg"></div>
+            
+            <div class="form-group">
+                <label for="identifier">Username or Email</label>
+                <input type="text" id="identifier" name="identifier" required placeholder="Enter your username or email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
+            </div>
+            
+            <button type="submit" class="auth-btn" id="loginBtn">Login</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Don't have an account? <a href="/register" class="auth-link">Register</a></p>
+            <p class="mt-2"><a href="/reset-password" class="auth-link">Forgot Password?</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- Loader Animation -->
+<div class="loader-container" id="loaderContainer">
+    <div class="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-logo"></div>
+        <div class="loader-text">LOADING...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const errorMsg = document.getElementById('errorMsg');
+        const loaderContainer = document.getElementById('loaderContainer');
+        
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loader
+            loaderContainer.classList.add('show');
+            
+            // Get form data
+            const identifier = document.getElementById('identifier').value;
+            const password = document.getElementById('password').value;
+            
+            // Check if identifier is email or username
+            const isEmail = identifier.includes('@');
+            
+            if (isEmail) {
+                // Log in with email and password
+                firebase.auth().signInWithEmailAndPassword(identifier, password)
+                    .then((userCredential) => {
+                        // Hide loader
+                        loaderContainer.classList.remove('show');
+                        // Redirect to dashboard
+                        window.location.href = '/dashboard';
+                    })
+                    .catch((error) => {
+                        // Hide loader
+                        loaderContainer.classList.remove('show');
+                        // Show error message
+                        errorMsg.textContent = error.message;
+                        errorMsg.style.display = 'block';
+                    });
+            } else {
+                // Username login - first get email from Firestore based on username
+                firebase.firestore().collection('users')
+                    .where('username', '==', identifier)
+                    .get()
+                    .then((querySnapshot) => {
+                        if (querySnapshot.empty) {
+                            throw new Error('No user found with that username');
+                        }
+                        
+                        // Get the first matching user
+                        const userDoc = querySnapshot.docs[0];
+                        const email = userDoc.data().email;
+                        
+                        // Now sign in with email and password
+                        return firebase.auth().signInWithEmailAndPassword(email, password);
+                    })
+                    .then((userCredential) => {
+                        // Hide loader
+                        loaderContainer.classList.remove('show');
+                        // Redirect to dashboard
+                        window.location.href = '/dashboard';
+                    })
+                    .catch((error) => {
+                        // Hide loader
+                        loaderContainer.classList.remove('show');
+                        // Show error message
+                        errorMsg.textContent = error.message;
+                        errorMsg.style.display = 'block';
+                    });
+            }
+        });
+    });
+</script>
+{% endblock %} 

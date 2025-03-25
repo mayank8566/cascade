@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>CPVP Roster</h1>
+    <div class="cosmic-divider"></div>
+</div>
+
+<div class="npot-roster-container">
+    <div class="roster-header">
+        <h2>Rosters Of Cascades [ CSD ]</h2>
+        <h3>CPVP</h3>
+    </div>
+    
+    <div class="coming-soon-container">
+        <div class="coming-soon">
+            <h2>COMING SOON</h2>
+            <p>Our CPVP roster is currently being updated. Stay tuned for the official list of players!</p>
+            <div class="pulse-effect"></div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    .npot-roster-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 115, 255, 0.3);
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .roster-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .roster-header h2 {
+        color: #fff;
+        font-size: 2rem;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .roster-header h3 {
+        color: #a000ff;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+    
+    .coming-soon-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 300px;
+        position: relative;
+    }
+    
+    .coming-soon {
+        text-align: center;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .coming-soon h2 {
+        font-size: 3rem;
+        color: #0073ff;
+        margin-bottom: 20px;
+        text-shadow: 0 0 10px rgba(0, 115, 255, 0.8);
+        animation: glow 2s infinite alternate;
+    }
+    
+    .coming-soon p {
+        font-size: 1.2rem;
+        color: #fff;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .pulse-effect {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: rgba(0, 115, 255, 0.1);
+        z-index: 1;
+        animation: pulse 3s infinite;
+    }
+    
+    @keyframes glow {
+        from {
+            text-shadow: 0 0 10px rgba(0, 115, 255, 0.8);
+        }
+        to {
+            text-shadow: 0 0 20px rgba(0, 115, 255, 0.8), 0 0 30px rgba(0, 115, 255, 0.6);
+        }
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0.3;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.5;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 0.3;
+        }
+    }
+</style>
+{% endblock %} 

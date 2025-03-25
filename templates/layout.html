@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASCADE - Minecraft Team</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <script>
+        // Firebase configuration from Flask
+        const firebaseConfig = JSON.parse('{{ firebase_config|tojson|safe }}');
+    </script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="stars"></div>
+    <!-- Twinkling elements removed to improve performance -->
+    
+    <header>
+        <div class="logo">
+            <h1 class="static-glow">CASCADE</h1>
+        </div>
+        <nav class="centered-nav">
+            <ul>
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/about" class="nav-link">About</a></li>
+                <li><a href="/team" class="nav-link">Team</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Roster
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/roster">All Rosters</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/roster/npot">NPOT Roster</a></li>
+                        <li><a class="dropdown-item" href="/roster/smp">SMP Roster</a></li>
+                        <li><a class="dropdown-item" href="/roster/uhc">UHC Roster</a></li>
+                        <li><a class="dropdown-item" href="/roster/sword">Sword Roster</a></li>
+                        <li><a class="dropdown-item" href="/roster/cpvp">CPVP Roster</a></li>
+                    </ul>
+                </li>
+                <li id="login-link"><a href="/login" class="login-btn">Login</a></li>
+                <li id="register-link"><a href="/register" class="register-btn">Register</a></li>
+            </ul>
+        </nav>
+        <div id="profile-menu" style="display: none;" class="profile-menu">
+            <div class="profile-menu-container">
+                <img src="{{ url_for('static', filename='images/default-avatar.svg') }}" 
+                     alt="Profile" 
+                     class="profile-photo" 
+                     id="profile-photo">
+                <div class="profile-dropdown">
+                    <a href="/profile">Edit Profile</a>
+                    <a href="/tiers">Tiers</a>
+                    <a href="/mail" class="mail-link">
+                        Mail
+                        <span class="mail-badge" id="mailBadge">3</span>
+                    </a>
+                    <a href="#" id="logout-button">Logout</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CASCADE - Ruptures + FAITH Alliance | Minecraft Team</p>
+    </footer>
+
+    <!-- Error popup -->
+    <div id="error-popup" class="error-popup">
+        <div class="error-content">
+            <span class="close-error">&times;</span>
+            <h3>Error</h3>
+            <p id="error-message">Something went wrong.</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/firebase-init.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html> 

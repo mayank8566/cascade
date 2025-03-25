@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2>Join CASCADE</h2>
+            <div class="cosmic-divider"></div>
+        </div>
+        
+        <form class="auth-form" id="registerForm">
+            <div class="error-message" id="errorMsg"></div>
+            
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="Choose a username">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required placeholder="Create a password">
+                <div class="password-strength">
+                    <div class="strength-bar" id="strengthBar"></div>
+                </div>
+                <span class="strength-text" id="strengthText">Password strength</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+            </div>
+            
+            <button type="submit" class="auth-btn" id="registerBtn">Create Account</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Already have an account? <a href="/login" class="auth-link">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<!-- Loader Animation -->
+<div class="loader-container" id="loaderContainer">
+    <div class="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-logo"></div>
+        <div class="loader-text">CREATING ACCOUNT...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const registerForm = document.getElementById('registerForm');
+        const errorMsg = document.getElementById('errorMsg');
+        const loaderContainer = document.getElementById('loaderContainer');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthBar = document.getElementById('strengthBar');
+        const strengthText = document.getElementById('strengthText');
+        
+        // Password strength checker
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
+            let strength = 0;
+            let message = '';
+            
+            if (password.length >= 8) strength += 25;
+            if (password.match(/[a-z]+/)) strength += 25;
+            if (password.match(/[A-Z]+/)) strength += 25;
+            if (password.match(/[0-9]+/) || password.match(/[^a-zA-Z0-9]+/)) strength += 25;
+            
+            strengthBar.style.width = strength + '%';
+            
+            if (strength <= 25) {
+                strengthBar.style.backgroundColor = '#ff3860';
+                message = 'Weak';
+            } else if (strength <= 50) {
+                strengthBar.style.backgroundColor = '#ffdd57';
+                message = 'Fair';
+            } else if (strength <= 75) {
+                strengthBar.style.backgroundColor = '#48c774';
+                message = 'Good';
+            } else {
+                strengthBar.style.backgroundColor = '#0073ff';
+                message = 'Strong';
+            }
+            
+            strengthText.textContent = 'Password strength: ' + message;
+        });
+        
+        // Form submission
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            // Reset error message
+            errorMsg.textContent = '';
+            errorMsg.style.display = 'none';
+            
+            // Simple validation
+            if (password !== confirmPassword) {
+                errorMsg.textContent = 'Passwords do not match';
+                errorMsg.style.display = 'block';
+                return;
+            }
+            
+            if (password.length < 8) {
+                errorMsg.textContent = 'Password must be at least 8 characters long';
+                errorMsg.style.display = 'block';
+                return;
+            }
+            
+            // Show loader
+            loaderContainer.classList.add('show');
+            
+            // First check if username is already taken
+            firebase.firestore().collection('users')
+                .where('username', '==', username)
+                .get()
+                .then((querySnapshot) => {
+                    if (!querySnapshot.empty) {
+                        throw new Error('Username is already taken. Please choose a different one.');
+                    }
+                    
+                    // Create user with email and password
+                    return firebase.auth().createUserWithEmailAndPassword(email, password);
+                })
+                .then((userCredential) => {
+                    // Save additional user data in Firestore
+                    const user = userCredential.user;
+                    return firebase.firestore().collection('users').doc(user.uid).set({
+                        username: username,
+                        email: email,
+                        createdAt: new Date()
+                    });
+                })
+                .then(() => {
+                    // Hide loader
+                    loaderContainer.classList.remove('show');
+                    // Redirect to dashboard
+                    window.location.href = '/dashboard?registered=true';
+                })
+                .catch((error) => {
+                    // Hide loader
+                    loaderContainer.classList.remove('show');
+                    // Show error message
+                    errorMsg.textContent = error.message;
+                    errorMsg.style.display = 'block';
+                });
+        });
+    });
+</script>
+{% endblock %} 
