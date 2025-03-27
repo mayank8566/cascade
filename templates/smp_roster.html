@@ -12,11 +12,51 @@
         <h3>SMP</h3>
     </div>
     
-    <div class="coming-soon-container">
-        <div class="coming-soon">
-            <h2>COMING SOON</h2>
-            <p>Our SMP roster is currently being updated. Stay tuned for the official list of players!</p>
-            <div class="pulse-effect"></div>
+    <div class="roster-list-container">
+        <div class="roster-list">
+            <ul class="player-list">
+                <li class="player">
+                    <div class="player-rank">Lt3</div>
+                    <div class="player-name">Xbow</div>
+                </li>
+                <li class="player">
+                    <div class="player-rank">Lt3</div>
+                    <div class="player-name">Loveableghost</div>
+                </li>
+                <li class="player">
+                    <div class="player-rank">Lt3</div>
+                    <div class="player-name">Verynot_</div>
+                </li>
+                <li class="player">
+                    <div class="player-rank">Ht4</div>
+                    <div class="player-name">DeboDeRizz3r_7</div>
+                </li>
+                <li class="player">
+                    <div class="player-rank">Ht4</div>
+                    <div class="player-name">FIREFIST07</div>
+                </li>
+                <li class="player">
+                    <div class="player-rank">Ht4</div>
+                    <div class="player-name">Nott_Priyansh</div>
+                </li>
+                <li class="player">
+                    <div class="player-rank">Ht4</div>
+                    <div class="player-name">GwmDevil11</div>
+                </li>
+                <li class="player">
+                    <div class="player-rank">Ht4</div>
+                    <div class="player-name">MightyXDude</div>
+                </li>
+                <li class="player">
+                    <div class="player-rank">Lt3</div>
+                    <div class="player-name">F2ame_</div>
+                </li>
+            </ul>
+        </div>
+        <div class="roster-notes">
+            <h3>SMP Roster Notes</h3>
+            <p>This roster includes our Survival MultiPlayer specialists who excel in building, survival, and community gameplay.</p>
+            <p>Players are ranked according to their skill level, with Lt3 being Lieutenant tier 3 and Ht4 being High tier 4.</p>
         </div>
     </div>
 </div>
@@ -53,70 +93,68 @@
         margin-bottom: 5px;
     }
     
-    .coming-soon-container {
+    .roster-list-container {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .player-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .player {
+        display: flex;
         align-items: center;
-        min-height: 300px;
-        position: relative;
+        padding: 12px 15px;
+        background: rgba(0, 0, 0, 0.3);
+        border-left: 4px solid #0073ff;
+        margin-bottom: 10px;
+        border-radius: 0 5px 5px 0;
+        transition: all 0.3s ease;
     }
     
-    .coming-soon {
+    .player:hover {
+        background: rgba(0, 0, 0, 0.5);
+        transform: translateX(5px);
+    }
+    
+    .player-rank {
+        background: #0073ff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-right: 15px;
+        min-width: 45px;
         text-align: center;
-        position: relative;
-        z-index: 2;
     }
     
-    .coming-soon h2 {
-        font-size: 3rem;
+    .player-name {
+        color: white;
+        font-size: 1.1rem;
+    }
+    
+    .roster-notes {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 115, 255, 0.3);
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+    
+    .roster-notes h3 {
         color: #0073ff;
-        margin-bottom: 20px;
-        text-shadow: 0 0 10px rgba(0, 115, 255, 0.8);
-        animation: glow 2s infinite alternate;
+        margin-bottom: 15px;
+        font-size: 1.3rem;
     }
     
-    .coming-soon p {
-        font-size: 1.2rem;
+    .roster-notes p {
         color: #fff;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-    
-    .pulse-effect {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        height: 300px;
-        border-radius: 50%;
-        background: rgba(0, 115, 255, 0.1);
-        z-index: 1;
-        animation: pulse 3s infinite;
-    }
-    
-    @keyframes glow {
-        from {
-            text-shadow: 0 0 10px rgba(0, 115, 255, 0.8);
-        }
-        to {
-            text-shadow: 0 0 20px rgba(0, 115, 255, 0.8), 0 0 30px rgba(0, 115, 255, 0.6);
-        }
-    }
-    
-    @keyframes pulse {
-        0% {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 0.3;
-        }
-        50% {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0.5;
-        }
-        100% {
-            transform: translate(-50%, -50%) scale(0.8);
-            opacity: 0.3;
-        }
+        margin-bottom: 10px;
+        line-height: 1.6;
     }
 </style>
 {% endblock %} 
